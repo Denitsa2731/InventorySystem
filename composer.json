@@ -1,0 +1,12 @@
+{
+    "name": "deni/new_invoices",
+    "require": {
+        "symfony/apache-pack": "^1.0",
+        "symfony/routing": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
