@@ -31,22 +31,12 @@ class Application
                 ]
             ],
             'clients_update' => [
-                '/client_update'
+                '/client_update',
                 [
-
                 '_controller' => ClientController::class,
                 '_action' => 'update'
                 ]
-            ],
-
-            'delete' => [
-            '/client_delete'
-            [
-
-            '_controller' => ClientController::class,
-            '_action' => 'delete'
-
-    ],
+            ]
         ];
 
         foreach ($routes as $name => $arguments) {
