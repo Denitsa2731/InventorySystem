@@ -6,6 +6,7 @@ namespace App;
 use App\Controller\ServiceController;
 use App\Controller\ClientController;
 use App\Controller\InvoiceController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -36,23 +37,93 @@ class Application
                 '_controller' => ClientController::class,
                 '_action' => 'update'
                 ]
-            ]
+            ],
+            'clients_create' => [
+                '/client_create',
+                [
+                    '_controller' => ClientController::class,
+                    '_action' => 'create'
+                ]
+            ],
+            'clients_delete' => [
+                '/client_delete',
+                [
+                    '_controller' => ClientController::class,
+                    '_action' => 'delete'
+                ]
+            ],
+            'services_list' => [
+                '/service',
+                [
+                    '_controller' => ServiceController::class,
+                    '_action' => 'list'
+                ]
+            ],
+            'services_update' => [
+                '/service_update',
+                [
+                    '_controller' => ServiceController::class,
+                    '_action' => 'update'
+                ]
+            ],
+            'services_create' => [
+                '/service_create',
+                [
+                    '_controller' => ServiceController::class,
+                    '_action' => 'create'
+                ]
+            ],
+            'services_delete' => [
+                '/service_delete',
+                [
+                    '_controller' => ServiceController::class,
+                    '_action' => 'delete'
+                ]
+            ],
+            'invoices_list' => [
+                '/invoice',
+                [
+                    '_controller' => InvoiceController::class,
+                    '_action' => 'list'
+                ]
+            ],
+            'invoices_update' => [
+                '/invoice_update',
+                [
+                    '_controller' => InvoiceController::class,
+                    '_action' => 'update'
+                ]
+            ],
+            'invoices_create' => [
+                '/invoice_create',
+                [
+                    '_controller' => InvoiceController::class,
+                    '_action' => 'create'
+                ]
+            ],
+            'invoices_delete' => [
+                '/invoice_delete',
+                [
+                    '_controller' => InvoiceController::class,
+                    '_action' => 'delete'
+                ]
+            ],
+
         ];
 
         foreach ($routes as $name => $arguments) {
             $this->routes->add($name, new Route($arguments[0], $arguments[1]));
         }
     }
+
     public function dispatch()
     {
-
-        $uri = $_SERVER['REQUEST_URI'];
-        $uri = substr($uri, 26);
+        $request = Request::createFromGlobals();
 
         $context = new RequestContext();
         $matcher = new UrlMatcher($this->routes, $context);
         try {
-            $parameters = $matcher->match($uri);
+            $parameters = $matcher->match($request->getPathInfo());
         } catch (ResourceNotFoundException $e) {
             die('error 404');
         }

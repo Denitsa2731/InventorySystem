@@ -4,23 +4,25 @@ use App\Database\Database;
 
 class ServiceRepository
 {
-    private $stm;
+    private $conn;
 
     function __construct()
     {
-        $this->stm = $this->connect();
+        $db = new Database();
+
+        $this->conn = $db->connect();
     }
 
     public function addService($name, $price, $creation_date)
     {
-        $stmt = $this->stm->prepare("INSERT INTO invoices.service(name, price, creation_date) VALUES (?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO invoices.service(name, price, creation_date) VALUES (?, ?, ?)");
         return $stmt->execute([$name, $price, $creation_date]);
     }
 
     public function showAllServices()
     {
         $invoices = [];
-        $stmt = $this->stm->query("SELECT * FROM invoices.service ORDER BY id DESC");
+        $stmt = $this->conn->query("SELECT * FROM invoices.service ORDER BY id DESC");
 
         while ($row = $stmt->fetch()) {
             array_push($invoices, array(
@@ -36,7 +38,7 @@ class ServiceRepository
 
     public function getServiceById(int $id)
     {
-        $stmt = $this->stm->prepare("SELECT * FROM invoices.service WHERE id=?");
+        $stmt = $this->conn->prepare("SELECT * FROM invoices.service WHERE id=?");
         $stmt->execute([$id]);
 
         return $stmt->fetch();
@@ -44,14 +46,14 @@ class ServiceRepository
 
     public function updateService(array $data)
     {
-        $stmt = $this->stm->prepare("UPDATE invoices.service SET name=?, price=?, creation_date=? WHERE id=?");
+        $stmt = $this->conn->prepare("UPDATE invoices.service SET name=?, price=?, creation_date=? WHERE id=?");
 
         return $stmt->execute([$data['name'], $data['price'], $data['creation_date'], $data['id']]);
     }
 
     public function deleteClient(int $id)
     {
-        $stmt = $this->stm->prepare("DELETE FROM invoices.service WHERE id=?");
+        $stmt = $this->conn->prepare("DELETE FROM invoices.service WHERE id=?");
         return $stmt->execute([$id]);
     }
 

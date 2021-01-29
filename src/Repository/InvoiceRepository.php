@@ -2,20 +2,24 @@
 namespace App\Repository;
 
 use App\Database\Database;
+use App\Entity\Invoice;
 
 class InvoiceRepository
 {
-    private $stm;
+    private $conn;
 
     function __construct()
     {
-        $this->stm = $this->connect();
+        $db = new Database();
+
+        $this->conn = $db->connect();
+
     }
 
     public function getAllClientNames()
     {
         $clientNames = [];
-        $stmt = $this->stm->query("SELECT client_name FROM invoices.client ORDER BY id DESC");
+        $stmt = $this->conn->query("SELECT client_name FROM invoices.client ORDER BY id DESC");
 
         while ($row = $stmt->fetch()) {
             array_push($clientNames, $row['client_name']);
@@ -26,24 +30,24 @@ class InvoiceRepository
 
     public function addInvoice($client_name, $number, $date, $client_email, $client_address, $creation_date)
     {
-        $stmt = $this->stm->prepare("INSERT INTO invoices.invoice(client_name, date, number, client_email, client_address, creation_date) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO invoices.invoice(client_name, date, number, client_email, client_address, creation_date) VALUES (?, ?, ?, ?, ?, ?)");
         return $stmt->execute([$client_name, $date, $number, $client_email, $client_address, $creation_date]);
     }
 
     public function showAllInvoices()
     {
         $invoices = [];
-        $stmt = $this->stm->query("SELECT * FROM invoices.invoice ORDER BY id DESC");
+        $stmt = $this->conn->query("SELECT * FROM invoices.invoice ORDER BY id DESC");
 
         while ($row = $stmt->fetch()) {
             array_push($invoices, array(
                 'id' => $row['id'],
                 'name' => $row['client_name'],
-                'date' => $row['date'],
                 'number' => $row['number'],
-                'client_email' => $row['client_email'],
-                'client_address' => $row['client_address'],
-                'date' => $row ['creation_date'],
+                'date' => $row['date'],
+                'email' => $row['client_email'],
+                'address' => $row['client_address'],
+                'creation_date' => $row['creation_date'],
             ));
         }
 
@@ -51,23 +55,29 @@ class InvoiceRepository
     }
     public function getInvoiceById(int $id)
     {
-        $stmt = $this->stm->prepare("SELECT * FROM invoices.invoice WHERE id=?");
-        $stmt->execute([$id]);
+            $sql = "SELECT * FROM invoices.invoice WHERE id=:id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+            $result = $stmt->fetch();
+            $invoice = new Invoice($result['client_name'], $result['number'], $result['date'] ,$result['client_email'], $result['client_address'], $result['creation_date']);
 
-        return $stmt->fetch();
+            return $invoice;
     }
+
 
     public function updateInvoice(array $data)
     {
-        $stmt = $this->stm->prepare("UPDATE invoices.invoice SET client_name=?, number=?, date=? client_email=?, client_address=?, creation_date=? WHERE id=?");
 
-        return $stmt->execute([$data['name'], $data['number'], $data['creation_date'], $data['id'], $data['client_email'], $data['client_address'], $data['creation_date']]);
+        $stmt = $this->conn->prepare("UPDATE invoices.invoice SET client_name=?, number=?, date=? client_email=?, client_address=?, creation_date=? WHERE id=?");
+
+        return $stmt->execute([$data['client_name'], $data['number'], $data['date'], $data['id'], $data['client_email'], $data['client_address'], $data['creation_date']]);
     }
 
 
     public function deleteInvoice(int $id)
     {
-        $stmt = $this->stm->prepare("DELETE FROM invoices.invoice WHERE id=?");
+        $stmt = $this->conn->prepare("DELETE FROM invoices.invoice WHERE id=?");
         return $stmt->execute([$id]);
     }
 }

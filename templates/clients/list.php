@@ -1,4 +1,3 @@
-
 <div class="col-md-8">
     <a href="client_create" class="btn btn-primary">Create</a>
     <table class="table table-hover" id="data-table">
@@ -23,7 +22,7 @@
 
                 <td>
 
-                    <a href="delete.php?action=service&id=<?= $row['id']; ?>" class="badge badge-danger p-2">Delete</a>
+                    <a href="client_delete?id=<?= $row['id']; ?>" class="badge badge-danger p-2">Delete</a>
                     <!--                            <a href="ServiceController.php?delete=--><?//= $row['id']; ?><!--" class="badge badge-danger p-2">Delete</a>-->
                     <a href="client_update?id=<?= $row['id']; ?>" class="badge badge-success p-2" >Edit</a>
                 </td>

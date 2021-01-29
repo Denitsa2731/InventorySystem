@@ -94,10 +94,14 @@ class ClientController extends BaseController
 
     public function delete()
     {
-        $client = $this->repository->getClientById($_GET['id']);
+       if (isset($_GET['id'])) {
+           $client = $this->repository->getClientById($_GET['id']);
+       }
+
 
         if ($client == false) {
             die ('404');
+
         }
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
