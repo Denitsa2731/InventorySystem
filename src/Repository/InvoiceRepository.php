@@ -16,23 +16,13 @@ class InvoiceRepository
 
     }
 
-    public function getAllClientNames()
+
+    public function addInvoice($client_name, $number, $date, $client_email, $client_address, $creation_date, $client_id)
     {
-        $clientNames = [];
-        $stmt = $this->conn->query("SELECT client_name FROM invoices.client ORDER BY id DESC");
-
-        while ($row = $stmt->fetch()) {
-            array_push($clientNames, $row['client_name']);
-        }
-
-        return $clientNames;
+        $stmt = $this->conn->prepare("INSERT INTO invoices.invoice(client_name, number, date, client_email, client_address, creation_date, client_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$client_name,  $number, $date, $client_email, $client_address, $creation_date, $client_id]);
     }
 
-    public function addInvoice($client_name, $number, $date, $client_email, $client_address, $creation_date)
-    {
-        $stmt = $this->conn->prepare("INSERT INTO invoices.invoice(client_name, date, number, client_email, client_address, creation_date) VALUES (?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$client_name, $date, $number, $client_email, $client_address, $creation_date]);
-    }
 
     public function showAllInvoices()
     {
@@ -48,6 +38,7 @@ class InvoiceRepository
                 'email' => $row['client_email'],
                 'address' => $row['client_address'],
                 'creation_date' => $row['creation_date'],
+
             ));
         }
 
@@ -60,7 +51,7 @@ class InvoiceRepository
             $stmt->bindValue(':id', $id);
             $stmt->execute();
             $result = $stmt->fetch();
-            $invoice = new Invoice($result['client_name'], $result['number'], $result['date'] ,$result['client_email'], $result['client_address'], $result['creation_date']);
+            $invoice = new Invoice($result['client_name'], $result['client_email'], $result['client_address'] ,$result['creation_date'], $result['date'], $result['number']);
 
             return $invoice;
     }
@@ -68,10 +59,9 @@ class InvoiceRepository
 
     public function updateInvoice(array $data)
     {
+        $stmt = $this->conn->prepare("UPDATE invoices.invoice SET client_name=?, number=?, date=?, client_email=?, client_address=?, creation_date=? WHERE id=?");
 
-        $stmt = $this->conn->prepare("UPDATE invoices.invoice SET client_name=?, number=?, date=? client_email=?, client_address=?, creation_date=? WHERE id=?");
-
-        return $stmt->execute([$data['client_name'], $data['number'], $data['date'], $data['id'], $data['client_email'], $data['client_address'], $data['creation_date']]);
+        return $stmt->execute([$data['name'], $data['number'], $data['date'], $data['email'], $data['address'], $data['creation_date'], $data['id']]);
     }
 
 

@@ -1,6 +1,8 @@
 <?php
 namespace App\Repository;
+
 use App\Database\Database;
+use App\Entity\Service;
 
 class ServiceRepository
 {
@@ -38,10 +40,14 @@ class ServiceRepository
 
     public function getServiceById(int $id)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM invoices.service WHERE id=?");
-        $stmt->execute([$id]);
+        $sql = "SELECT * FROM invoices.service WHERE id=:id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        $service = new Service($result['name'], $result['creation_date'], $result['price']);
 
-        return $stmt->fetch();
+        return $service;
     }
 
     public function updateService(array $data)
@@ -51,7 +57,7 @@ class ServiceRepository
         return $stmt->execute([$data['name'], $data['price'], $data['creation_date'], $data['id']]);
     }
 
-    public function deleteClient(int $id)
+    public function deleteService(int $id)
     {
         $stmt = $this->conn->prepare("DELETE FROM invoices.service WHERE id=?");
         return $stmt->execute([$id]);

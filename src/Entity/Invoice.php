@@ -11,6 +11,8 @@ class Invoice
     private $date;
     private $number;
 
+
+
     public function __construct( $client_name, $client_email, $client_address,$creation_date, $date, $number)
     {
         $this->name = $client_name;
@@ -19,6 +21,7 @@ class Invoice
         $this->creation_date = $creation_date;
         $this->date = $date;
         $this->number = $number;
+
     }
 
     public function getInvoiceName()
@@ -66,4 +69,6 @@ class Invoice
     public function setNumber($number){
         $this->number = $number;
     }
+
+
 }

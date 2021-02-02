@@ -4,5 +4,5 @@
             <h3 class="text-center text-info">Are you sure?</h3>
             <button class="btn btn-primary"> <?php echo $arguments['button_label'] ?></button>
         </form>
-        <a href="invoice" class="btn btn-primary">NO</a>
+        <a href="services" class="btn btn-primary">NO</a>
     </div>

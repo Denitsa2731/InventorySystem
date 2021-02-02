@@ -53,7 +53,7 @@ class Application
                 ]
             ],
             'services_list' => [
-                '/service',
+                '/services',
                 [
                     '_controller' => ServiceController::class,
                     '_action' => 'list'

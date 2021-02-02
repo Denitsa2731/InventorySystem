@@ -24,6 +24,8 @@ class ClientRepository
         return $stmt->execute([$client_name, $client_email, $client_address, $creation_date]);
     }
 
+
+
     public function showAllClients()
     {
         $clients = [];

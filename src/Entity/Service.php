@@ -10,9 +10,9 @@ class Service
 
     public function __construct( $name, $creation_date, $price)
     {
-        $this->client_name = $name;
+        $this->name = $name;
         $this->creation_date = $creation_date;
-        $this->date = $price;
+        $this->price = $price;
     }
 
     public function getName()
