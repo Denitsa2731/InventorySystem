@@ -1,15 +1,14 @@
-<div class="col-md-8">
-    <a href="invoice_create" class="btn btn-primary">Create</a>
-    <table class="table table-hover" id="data-table">
+<div class="container">
+    <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <td>Name</td>
-            <td>Number</td>
-            <td>Date</td>
-            <td>Email</td>
-            <td>Address</td>
-            <td>Creation Date</td>
-            <td>Action</td>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Date</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Creation Date</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -24,22 +23,22 @@
                 <td><?= $row['creation_date']; ?></td>
 
 
-                <td>
-
-                    <a href="invoice_delete?id=<?= $row['id']; ?>" class="badge badge-danger p-2">Delete</a>
-                    <!--                            <a href="InvoiceController.php?delete=--><?//= $row['id']; ?><!--" class="badge badge-danger p-2">Delete</a>-->
-                    <a href="invoice_update?id=<?= $row['id']; ?>" class="badge badge-success p-2" >Edit</a>
-                </td>
+                <th>
+                    <a href="invoice_show?id=<?php echo $row['id']; ?>" class="badge badge-primary p-2">Show</a>
+                    <a href="invoice_delete?id=<?php echo $row['id']; ?>" class="badge badge-danger p-2">Delete</a>
+                    <a href="invoice_update?id=<?php echo $row['id']; ?>" class="badge badge-success p-2" >Edit</a>
+                </th>
             </tr>
         <?php } ?>
         </tbody>
     </table>
+    <div class="col-md-11">
+        <div class="float-right">
+            <a href="invoice_create" class="btn btn-primary">Create</a>
+        </div>
 
 </div>
 
 
-</body>
 
 
-
-</html>

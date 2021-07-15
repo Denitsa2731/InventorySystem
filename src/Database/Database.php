@@ -16,7 +16,7 @@ class Database
         $this->sName = "localhost";
         $this->uName = "deni";
         $this->pass = "deni";
-        $this->db_name = "invoices";
+        $this->db_name = "inventory";
         $this->charset = "utf8mb4";
 
         try {

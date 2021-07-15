@@ -1,5 +1,5 @@
 {
-    "name": "deni/new_invoices",
+    "name": "deni/InventorySystem",
     "require": {
         "symfony/apache-pack": "^1.0",
         "symfony/routing": "^5.2",

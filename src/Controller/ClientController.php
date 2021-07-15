@@ -20,9 +20,16 @@ class ClientController extends BaseController
     public function list()
     {
 
+        session_start();
+        if($_SESSION["user"])
+        {
         $this->render('../templates/clients/list.php', [
             'clients' => $this->repository->showAllClients()
         ]);
+        }else{
+            $_SESSION['last_url'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            header('Location: http://localhost/~deni/InventorySystem/public/user/login');
+        }
     }
 
     public function create()
@@ -42,7 +49,7 @@ class ClientController extends BaseController
                 $date = $_POST['date'];
 
                 $this->repository->addClient($name, $email,$address, $date);
-                header('Location: http://localhost/~deni/new_invoices/public/client');
+                header('Location: http://localhost/~deni/InventorySystem/public/client');
             }
 
             die('error');
@@ -75,7 +82,7 @@ class ClientController extends BaseController
 
 
                     $this->repository->updateClient($data);
-                    header('Location: http://localhost/~deni/new_invoices/public/client');
+                    header('Location: http://localhost/~deni/InventorySystem/public/client');
                 }
 
                 die('error');
@@ -107,7 +114,7 @@ class ClientController extends BaseController
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->repository->deleteClient($_GET['id']);
-            header('Location: http://localhost/~deni/new_invoices/public/client');
+            header('Location: http://localhost/~deni/InventorySystem/public/client');
             exit(0);
         }
         $this->render('../templates/clients/delete.php', [

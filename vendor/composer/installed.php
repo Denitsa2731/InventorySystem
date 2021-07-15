@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '8b0b338d7feaf419b93893f948619ffb0ada875c',
+    'reference' => '72876e87c2e4efed29d9d9c15be8a1e777e27afc',
     'name' => 'deni/new_invoices',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '8b0b338d7feaf419b93893f948619ffb0ada875c',
+      'reference' => '72876e87c2e4efed29d9d9c15be8a1e777e27afc',
     ),
     'symfony/apache-pack' => 
     array (

@@ -22,6 +22,11 @@ class InvoiceRepository
         $stmt = $this->conn->prepare("INSERT INTO invoices.invoice(client_name, number, date, client_email, client_address, creation_date, client_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
         return $stmt->execute([$client_name,  $number, $date, $client_email, $client_address, $creation_date, $client_id]);
     }
+    public function add_service($qty, $invoiceId, $serviceId){
+        $stmt = $this->conn->prepare("INSERT INTO invoices.invoice_service(qty, invoice_id, service_id) VALUES (?, ?, ?)");
+        return $stmt->execute([$qty, $invoiceId, $serviceId]);
+    }
+
 
 
     public function showAllInvoices()
@@ -46,28 +51,59 @@ class InvoiceRepository
     }
     public function getInvoiceById(int $id)
     {
-            $sql = "SELECT * FROM invoices.invoice WHERE id=:id";
+            $sql = "
+                SELECT
+                    * 
+                FROM
+                    invoices.invoice
+                WHERE 
+                    id=:id
+            ";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':id', $id);
             $stmt->execute();
             $result = $stmt->fetch();
-            $invoice = new Invoice($result['client_name'], $result['client_email'], $result['client_address'] ,$result['creation_date'], $result['date'], $result['number']);
+            if ($result!=false){
+                $invoice = new Invoice($result['client_name'], $result['client_email'], $result['client_address'] ,$result['creation_date'], $result['date'], $result['number'], $result['client_id'], $result['id']);
 
-            return $invoice;
+                return $invoice;
+            }
+            return false;
     }
 
 
     public function updateInvoice(array $data)
     {
-        $stmt = $this->conn->prepare("UPDATE invoices.invoice SET client_name=?, number=?, date=?, client_email=?, client_address=?, creation_date=? WHERE id=?");
+        $sql = "
+            UPDATE
+                invoices.invoice 
+            SET
+                number = :number, 
+                date = :date 
+            WHERE
+                id = :id
+        ";
 
-        return $stmt->execute([$data['name'], $data['number'], $data['date'], $data['email'], $data['address'], $data['creation_date'], $data['id']]);
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':number', $data['number'], \PDO::PARAM_INT);
+        $stmt->bindValue(':date', $data['date'], \PDO::PARAM_STR);
+        $stmt->bindValue(':id', $data['id'], \PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 
 
     public function deleteInvoice(int $id)
     {
-        $stmt = $this->conn->prepare("DELETE FROM invoices.invoice WHERE id=?");
-        return $stmt->execute([$id]);
+        $sql = "
+            DELETE FROM
+                    invoices.invoice 
+            WHERE 
+                    id= :id
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+
+        return $stmt->execute();
     }
 }
